@@ -21,8 +21,13 @@ app.use(express.static('./public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-
-app.get('/', async(_,res) => {
+app.get('*', function(_req, res){
+    res.status(404).json({
+        state:"error",
+        message:"the page is not available"
+    })
+});
+app.get('/', async(_req,res) => {
     const dataProduct= await modelProduct.getMany()
     res.render('index.ejs',{dataProduct})
 }) 
@@ -33,7 +38,3 @@ app.use('/', routerCart)
 
 const port = process.env.PORT || 3000
 const myServer=app.listen(port)
-
-// const io=new Server(myServer)
-
-// instanceSockets(io)
